@@ -6,7 +6,7 @@ from tqdm import tqdm
 import json
 
 #streamlit connection address and port are defined in docker compose files
-client = weaviate.Client("http://localhost:8080", timeout_config=(4, 60))
+client = weaviate.Client("http://localhost:5555", timeout_config=(4, 60))
 
 #Schema definition with thesis class
 schema = {"classes": [
@@ -75,4 +75,9 @@ with client.batch(batch_size=2048, callback=RequestCounter(), timeout_retries=8)
             class_name = "Thesis"
         )
 
-client.schema.get() # get the full schema as example
+print(json.dumps(client.schema.get())) # get the full schema as example
+
+result = client.query.aggregate("Thesis") \
+    .with_fields('meta { count }') \
+    .do()
+print(result)

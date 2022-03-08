@@ -4,7 +4,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import weaviate
-client = weaviate.Client("http://localhost:8080")
+client = weaviate.Client("http://localhost:5555")
 
 #input for the searched text
 search_text = st.text_input('Search')
