@@ -6,7 +6,7 @@ from tqdm import tqdm
 import json
 
 #streamlit connection address and port are defined in docker compose files
-client = weaviate.Client("http://localhost:5555", timeout_config=(4, 60))
+client = weaviate.Client("http://localhost:5556", timeout_config=(4, 60))
 
 #Schema definition with thesis class
 schema = {"classes": [
@@ -51,15 +51,19 @@ class RequestCounter:
 translator = Translator()
 
 with client.batch(batch_size=2048, callback=RequestCounter(), timeout_retries=8) as batch:
-    with open('dataset.json', 'r') as f:
+    with open('/Users/dominikderen/dev/swarmcheck/weaviate_demo/dataset.json', 'r') as f:
         dataset = json.load(f)
 
     #sanity check
     assert len(dataset['_id'].values()) == len(dataset['name'].values()) == len(dataset['lang'].values())
 
     multilang = False
+    i = 0
 
     for id, name, lang in tqdm(zip(dataset['_id'].values(), dataset['name'].values(), dataset['lang'].values()), total = len(dataset['_id'].values())):
+        i = i+1
+        if i > 100:
+            break
         if not multilang and lang != 'en':
             translation = translator.translate(name)
             name = translation.text

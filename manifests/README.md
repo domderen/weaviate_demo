@@ -17,5 +17,13 @@ helm upgrade \
   weaviate.tgz \
   --install \
   --namespace "weaviate" \
-  --values ./values.yaml
+  --values ./values-prod.yaml
+
+# Deploy Dev
+helm upgrade \
+  "weaviate" \
+  weaviate.tgz \
+  --install \
+  --namespace "weaviate-dev" \
+  --values ./values-dev.yaml
 ```
